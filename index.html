@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>悟空体育 · 知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #fbe9d2 0%, #f3d5b5 45%, #ecc49e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-container {
+            max-width: 1120px;
+            width: 100%;
+        }
+
+        /* 顶层卡片组 */
+        .hero-card {
+            background: rgba(255, 255, 245, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 2.5rem 2.8rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(160, 100, 60, 0.08);
+            border: 1px solid rgba(255, 245, 230, 0.6);
+            transition: box-shadow 0.2s;
+        }
+
+        .hero-title {
+            font-size: 2.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #4d2e1b;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: #6d4f34;
+            max-width: 640px;
+            line-height: 1.6;
+        }
+
+        .hero-sub a {
+            color: #8a4f2c;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed #b5835a;
+            transition: 0.2s;
+        }
+
+        .hero-sub a:hover {
+            background-color: rgba(200, 140, 90, 0.12);
+            border-bottom-style: solid;
+        }
+
+        /* 目录网格 —— 知识库入口风格 */
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.8rem;
+        }
+
+        .dir-item {
+            background: #fffbf7;
+            border-radius: 24px;
+            padding: 1.5rem 1.2rem;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(120, 80, 40, 0.06);
+            border: 1px solid #f3e7db;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dir-item:hover {
+            background: #fffdfa;
+            border-color: #dbb997;
+            box-shadow: 0 10px 20px rgba(110, 70, 30, 0.06);
+        }
+
+        .dir-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #b58863;
+            margin-bottom: 0.5rem;
+        }
+
+        .dir-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #3a2517;
+            margin-bottom: 0.4rem;
+        }
+
+        .dir-desc {
+            font-size: 0.9rem;
+            color: #624c38;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .dir-desc a {
+            color: #7b4b2a;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted #c9a786;
+            transition: 0.15s;
+        }
+
+        .dir-desc a:hover {
+            border-bottom-color: #7b4b2a;
+        }
+
+        /* 双栏内容区 */
+        .split-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin-bottom: 2.8rem;
+        }
+
+        .panel-left {
+            flex: 2;
+            min-width: 280px;
+        }
+
+        .panel-right {
+            flex: 1.2;
+            min-width: 200px;
+        }
+
+        .info-card {
+            background: #fffcf8;
+            border-radius: 28px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f2e2d2;
+            margin-bottom: 1.8rem;
+        }
+
+        .info-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3f2a1a;
+            margin-bottom: 1rem;
+            letter-spacing: 0.3px;
+            border-left: 4px solid #c4956e;
+            padding-left: 0.8rem;
+        }
+
+        .info-card p {
+            color: #4a3828;
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+            font-size: 0.96rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.6rem;
+            color: #4a3828;
+            line-height: 1.5;
+            font-size: 0.96rem;
+        }
+
+        .info-card li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #aa7a55;
+            font-size: 1.1rem;
+        }
+
+        .note-box {
+            background: #f7ede3;
+            border-radius: 22px;
+            padding: 1.5rem 1.8rem;
+            border-left: 5px solid #b5835a;
+            margin-bottom: 1.8rem;
+        }
+
+        .note-box .note-title {
+            font-weight: 600;
+            color: #3f2a1a;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .note-box p {
+            color: #4f3c2b;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .faq-mini {
+            background: #fffcf8;
+            border-radius: 28px;
+            padding: 1.8rem 2rem;
+            border: 1px solid #f2e2d2;
+        }
+
+        .faq-mini h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3f2a1a;
+            margin-bottom: 1rem;
+            letter-spacing: 0.2px;
+        }
+
+        .faq-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .faq-q {
+            font-weight: 600;
+            color: #4f321f;
+            font-size: 0.98rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .faq-a {
+            color: #5c4634;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .faq-a a {
+            color: #7b4b2a;
+            text-decoration: none;
+            border-bottom: 1px dotted #c9a786;
+        }
+
+        .faq-a a:hover {
+            border-bottom-style: solid;
+        }
+
+        .rel-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .rel-tag {
+            background: #f2e3d4;
+            color: #4d321f;
+            padding: 0.35rem 1.1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            border: 1px solid #e1ccb7;
+            transition: 0.15s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .rel-tag:hover {
+            background: #e4cfbb;
+            border-color: #b68863;
+        }
+
+        /* 页脚 */
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            color: #4d3a29;
+            font-size: 0.85rem;
+            opacity: 0.75;
+            border-top: 1px solid #dcc5af;
+            padding-top: 2rem;
+        }
+
+        .footer-note a {
+            color: #5b3f2b;
+            text-decoration: none;
+            border-bottom: 1px dotted;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 1rem 0.8rem 3rem;
+            }
+
+            .hero-card {
+                padding: 1.8rem 1.2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .directory-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .split-panel {
+                flex-direction: column;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+
+            .faq-mini {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .directory-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <!-- hero 区 -->
+    <div class="hero-card">
+        <div class="hero-title">📚 悟空体育 · 知识库</div>
+        <div class="hero-sub">
+            围绕「<a href="https://cn-wksport.com">悟空体育</a>」整理的结构化说明，涵盖主题背景、常见疑问与延伸阅读。页面内容保持客观，方便快速查阅。
+        </div>
+    </div>
+
+    <!-- 目录网格（入口式卡片） -->
+    <div class="directory-grid">
+        <div class="dir-item">
+            <div class="dir-label">主题背景</div>
+            <div class="dir-heading">体育内容聚合</div>
+            <div class="dir-desc">从赛事动态到运动科普，<a href="https://cn-wksport.com">悟空体育</a> 提供多维度信息整合。</div>
+        </div>
+        <div class="dir-item">
+            <div class="dir-label">功能说明</div>
+            <div class="dir-heading">信息检索与分类</div>
+            <div class="dir-desc">覆盖常见运动项目、训练方法及器材常识，便于快速定位。</div>
+        </div>
+        <div class="dir-item">
+            <div class="dir-label">参考来源</div>
+            <div class="dir-heading">数据与内容基础</div>
+            <div class="dir-desc">汇总公开资料与行业标准，确保说明有据可查。</div>
+        </div>
+        <div class="dir-item">
+            <div class="dir-label">使用提示</div>
+            <div class="dir-heading">浏览与搜索建议</div>
+            <div class="dir-desc">善用分类标签，可提升信息筛选效率。</div>
+        </div>
+    </div>
+
+    <!-- 双栏：左侧说明 / 右侧提示 -->
+    <div class="split-panel">
+        <div class="panel-left">
+            <div class="info-card">
+                <h2>关于悟空体育的内容方向</h2>
+                <p>这个知识库围绕「悟空体育」相关的运动信息、赛事常识和训练理念展开。内容整理自公开的运动科学资料及社区讨论，不包含个人观点或商业推广。</p>
+                <p>以下为常见内容类别：</p>
+                <ul>
+                    <li><strong>运动项目基础</strong> —— 球类、田径、水上运动等规则与装备概述。</li>
+                    <li><strong>训练与恢复</strong> —— 基础体能训练方法、拉伸与损伤预防原则。</li>
+                    <li><strong>赛事与记录</strong> —— 国内外代表性赛事结构、历史背景简要梳理。</li>
+                    <li><strong>器材与场地</strong> —— 常见运动器材规格及场地标准参考。</li>
+                </ul>
+                <p style="margin-top:0.6rem;">若需了解更具体的条目，可直接前往 <a href="https://cn-wksport.com" style="color:#7b4b2a;text-decoration:underline;text-underline-offset:3px;">悟空体育</a> 浏览完整信息体系。</p>
+            </div>
+            <div class="note-box">
+                <div class="note-title">📌 知识库说明</div>
+                <p>本页为导航式入口，内容经过筛选与归纳，力求准确。运动相关建议请结合实际身体情况并咨询专业人士。所有外部链接仅作信息索引，不构成推荐。</p>
+            </div>
+        </div>
+        <div class="panel-right">
+            <div class="faq-mini">
+                <h3>❓ 常见疑问摘要</h3>
+                <div class="faq-item">
+                    <div class="faq-q">Q：如何查找特定的运动项目信息？</div>
+                    <div class="faq-a">可利用站内分类标签，或直接搜索关键词。大部分内容都能在 <a href="https://cn-wksport.com">悟空体育</a> 找到对应页面。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Q：训练建议是否适合所有人？</div>
+                    <div class="faq-a">仅供参考。年龄、体能基础、伤病史均会影响训练方案，请遵医嘱调整。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Q：内容多久更新一次？</div>
+                    <div class="faq-a">根据公开信息变动不定期整理，尽量保持时效性。</div>
+                </div>
+                <div class="rel-links">
+                    <span style="font-size:0.85rem;color:#5c4634;align-self:center;">相关信息：</span>
+                    <a href="https://cn-wksport.com" class="rel-tag">悟空体育</a>
+                    <span class="rel-tag" style="background:#f0ded0;">运动百科</span>
+                    <span class="rel-tag" style="background:#f0ded0;">训练基础</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示区 / 额外关联 -->
+    <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:center;">
+        <div style="background: #fff9f2; border-radius: 40px; padding: 0.8rem 2rem; border:1px solid #ebd6c0;">
+            <span style="color:#3f2a1a;font-weight:500;">🔍 检索提示：</span>
+            <span style="color:#5c4634;font-size:0.95rem;">使用关键词组合可缩小范围，例如“悟空体育 训练 基础”。</span>
+        </div>
+        <div style="background: #fcf3e9; border-radius: 40px; padding: 0.5rem 1.2rem; border:1px solid #e5ceb6;">
+            <span style="color:#5a3f2c;font-size:0.9rem;">📖 更多资料 · 查阅 <a href="https://cn-wksport.com" style="color:#7b4b2a;text-decoration:underline;text-underline-offset:2px;">悟空体育</a></span>
+        </div>
+    </div>
+
+    <!-- 页脚区域 -->
+    <div class="footer-note">
+        知识库入口 · 基于公开信息整理 · 内容持续完善中<br>
+        主要参考站点：<a href="https://cn-wksport.com">悟空体育</a> 及其他体育资料.
+    </div>
+</div>
+</body>
+</html>
